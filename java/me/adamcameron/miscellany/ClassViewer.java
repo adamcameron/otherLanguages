@@ -38,9 +38,9 @@ public class ClassViewer
         p = c.getSuperclass();
         while (bExtends){
 			try {
-				out.append(" extends ");
-				out.append(p.getName());
-		        out.append(nl);
+				out.append(" extends " + p.getName() + nl);
+				//out.append(p.getName());
+		        //out.append(nl);
 				p = p.getSuperclass();
 			} catch (Exception e){
 				bExtends = false;
