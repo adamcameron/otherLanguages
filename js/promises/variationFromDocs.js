@@ -8,25 +8,26 @@ function makeAPromise() {
 		console.log(indent + "(" + thisPromiseIndex + ") " + message + " (" + seconds + "sec)");
 	}
 
-
+	var emulatedLongRunningTask = function(resolve,reject){
+		var delay = 1000 + Math.round(Math.random() * 5) * 1000;
+		logStatus("Before setTimeout() called with delay of " + delay + "ms");
+		window.setTimeout(
+			function() {
+				logStatus("setTimeout() callback called");
+				logStatus("Before calling resolve() / reject()");
+				thisPromiseIndex % 2 ? resolve(delay) : reject("Even indexed Promises are rejected. This is Promise [" + thisPromiseIndex +"]");
+				logStatus("After calling resolve() / reject()")
+			},
+			delay
+		);
+		logStatus("After setTimeout() called");
+	}
 
 	logStatus("Before promise created");
 	var p1 = new Promise(
 		function(resolve, reject) {
 			logStatus("Promise callback called");
-			var delay = 1000 + Math.round(Math.random() * 5) * 1000;
-			
-			logStatus("Before setTimeout() called with delay of " + delay + "ms");
-			window.setTimeout(
-				function() {
-					logStatus("setTimeout() callback called");
-					logStatus("Before calling resolve() / reject()");
-					thisPromiseIndex % 2 ? resolve(delay) : reject("Even indexed Promises are rejected. This is Promise [" + thisPromiseIndex +"]");
-					logStatus("After calling resolve() / reject()")
-				},
-				delay
-			);
-			logStatus("After setTimeout() called");
+			emulatedLongRunningTask(resolve,reject);
 	});
 	logStatus("After promise created");
 
