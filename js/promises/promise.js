@@ -1,12 +1,9 @@
-function makeAPromise() {
-	console.log("Before promise");
-	var p1 = new Promise(
+// promise.js
+
+(function(){
+	new Promise(
 		function(resolve, reject) {
-			console.log("Promise callback");
-			resolve();
+			console.log("Promise with no resolve()");
 		}
-	).then(function(){
-		console.log("then() resolve callback")
-	});
-	console.log("After promise");
-}
+	);
+})();	
