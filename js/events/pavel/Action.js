@@ -13,5 +13,5 @@ pavel.Action.bindEvents = function(container){
 pavel.Action.buttonClickHandler = function(e){
 	console.log("buttonClickHandler() called");
 	console.log("needResult event triggered");
-	pavel.result.container.trigger("needResult");
+	window.trigger("needResult");
 }
