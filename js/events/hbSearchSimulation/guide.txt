@@ -1,0 +1,21 @@
+page load (200 OK) trigger("start")
+	-> deactivate controls (off in the mark-up) .on("start") .trigger("next")
+	-> load settings .on("start") .trigger("next")
+	-> get properties			 .on("start")	.trigger("next")	
+		-> change page(1) .on("next next next")
+			-> activate controls (stops listening for change page)
+												
+															
+
+change sort -> change setting (sort) -> sort -> change page(1)
+										
+change filter -> change settings (filters) -> filter -> sort
+
+change page -> change page setting (page=n)	-> render page
+											-> render pagination
+
+resize page -> change page setting (size) -> change page(1)
+								
+
+								
+								
