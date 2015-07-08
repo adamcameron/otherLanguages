@@ -1,7 +1,31 @@
 #sitefooter {
 	display:none;
 }
-.statusBox {
+#telemetryLog {
+	height: 25em;
+}
+
+textArea {
 	border: 1px solid black;
 	padding: 5px;
+	width:45em;
+	height: 3em;
+}
+.outlineStructure {
+	border: 1px solid black;
+}
+
+.left {
+	float: left;
+	width : 15%;
+	height: 100%;
+}
+.right {
+	margin-left : 15%;
+}
+
+div {
+	clear:both;
+	vertical-align: top;
+	height: 100%;
 }

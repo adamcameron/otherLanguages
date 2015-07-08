@@ -1,8 +1,7 @@
-page load (200 OK) trigger("start")
-	-> deactivate controls (off in the mark-up) .on("start") .trigger("next")
-	-> load settings .on("start") .trigger("next")
-	-> get properties			 .on("start")	.trigger("next")	
-		-> change page(1) .on("next next next")
+page load
+	-> load settings
+	-> get properties
+		-> change page(1)
 			-> activate controls (stops listening for change page)
 												
 															
