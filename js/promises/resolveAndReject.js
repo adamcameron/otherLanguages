@@ -1,14 +1,13 @@
 // resolveAndReject.js
 
 var makeAPromise = function(shouldResolve) {
+	console.log("Before promise");
 	var p = new Promise(
 		function(resolve, reject) {
 			console.log("Promise callback");
 			shouldResolve ? resolve(["resolution value in executor"]) : reject(["rejection reason in executor"]);
 		}
-	);
-
-	p.then(
+	).then(
 		function(value) {
 			console.log("First then() resolve callback called with:");
 			console.log(value);
@@ -35,9 +34,11 @@ var makeAPromise = function(shouldResolve) {
 			return Promise.reject(reason);
 		}
 	);
+	console.log("After promise");
 	return p;
 }
-var shouldResolve = window.location.search.match(/resolve=([^&]+)/)[1] == "true";
+var shouldResolveMatch = window.location.search.match(/resolve=([^&]+)/);
+var shouldResolve = (shouldResolveMatch !== null) && (shouldResolveMatch[1] == "true");
 
 console.log("makeAPromise() which should " + (shouldResolve ? "" : "not ") + "resolve");
 var p = makeAPromise(shouldResolve);

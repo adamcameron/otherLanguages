@@ -1,5 +1,5 @@
 // handledResolve.js
-
+console.log("Before promise");
 new Promise(
 	function(resolve, reject) {
 		console.log("Promise with handled resolve()");
@@ -12,4 +12,4 @@ new Promise(
 	console.log("resolve() provided via second then() using value " + value);
 	return Promise.resolve(value);
 });
-
+console.log("After promise");

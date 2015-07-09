@@ -1,8 +1,9 @@
 // defaultResolve.js
-
+console.log("Before promise");
 new Promise(
 	function(resolve, reject) {
 		console.log("Promise with default resolve()");
 		resolve("OK");
 	}
 );
+console.log("After promise");
