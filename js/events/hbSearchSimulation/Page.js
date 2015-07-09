@@ -29,4 +29,7 @@ HB.Page.prototype.activateControlsHandler = function(){
 		this.listeners.telemetry.element.trigger("sendTelemetry", {message:"Page.activateControlsHandler() called"});
 	}
 	this.element.off("activateControls");
+	if (typeof this.listeners.telemetry != "undefined"){
+		this.listeners.telemetry.element.trigger("sendTelemetry", {message:"Page.activateControls handler detached"});
+	}
 }
