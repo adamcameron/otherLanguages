@@ -1,6 +1,5 @@
 // slowWithNoResolve.js
 
-
 slowThing = function(label){
 	console.log(label);
 	console.log("Beginning of slowThing(\"" + label + "\") process");
@@ -14,11 +13,13 @@ slowThing = function(label){
 
 var startTime=new Date();
 console.log("Before promise");
+
 new Promise(
 	function(resolve, reject) {
 		slowThing("Executor");
 	}
 );
+
 var endTime = new Date();
 var elapsed = endTime - startTime;
 console.log("After promise (" + elapsed + "ms)\n\n\n");
