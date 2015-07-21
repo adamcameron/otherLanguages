@@ -1,20 +1,26 @@
 page load
 	-> load settings
 	-> get properties
-		-> change page(1)
+		-> do CHANGEPAGE(1)
 			-> activate controls (stops listening for change page)
-												
-															
+                                                                
+CHANGEPAGE
+	-> change page setting (page=n)
+		-> render page
+		-> render pagination
+                                                                                
 
-change sort -> change setting (sort) -> sort -> change page(1)
-										
-change filter -> change settings (filters) -> filter -> sort
+change sort
+	-> change setting (sort)
+		-> sort
+			-> do CHANGEPAGE(1)
+                                                     
+change filter
+	-> change settings (filters)
+		-> filter
+			-> sort
 
-change page -> change page setting (page=n)	-> render page
-											-> render pagination
 
-resize page -> change page setting (size) -> change page(1)
-								
-
-								
-								
+resize page
+	-> change page size setting
+		-> do CHANGEPAGE(1)
