@@ -1,6 +1,7 @@
 // handledResolve.js
+
 console.log("Before promise");
-new Promise(
+p = new Promise(
 	function(resolve, reject) {
 		console.log("Promise with handled resolve()");
 		resolve("OK");
@@ -9,3 +10,4 @@ new Promise(
 	console.log("resolve() provided via then() using value " + value);
 });
 console.log("After promise");
+console.dir(p);
