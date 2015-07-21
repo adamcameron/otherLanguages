@@ -1,0 +1,26 @@
+<!-- index.html -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+var server = io.connect("http://localhost:8080");
+server.on("messages", function(data){
+	alert("data.hello");
+});
+
+server.on("add chatter", insertChatter);
+
+var insertChatter = function(name){
+	var chatter = $("<li>"+name+"</li>").data("name", name);
+	$("#chatter").append(chatter);
+};
+
+server.on("remove chatter", removeChatter);
+
+var removeChatter = function(name){
+	$("#chatters li[data-name=" + name + "]").remove();
+}
+
+
+
+
+server.emit("messages", "ping");
+</script>
