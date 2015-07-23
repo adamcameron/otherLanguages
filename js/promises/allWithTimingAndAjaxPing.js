@@ -1,4 +1,4 @@
-// allWithTiming.js
+// allWithTimingAndAjaxPing.js
 startTime = new Date();
 
 function getElapsed(){
@@ -22,6 +22,7 @@ getIndexedPromise = function(index){
 		resolve(index);
 	}).then(function(value){
 		console.log("Before slowThing() @ " + getElapsed() + "ms");
+		$.get("../log.cfm?ident=" + value);
 		slowThing("(" + value + ") then() resolver @ " + getElapsed() + "ms");
 		console.log("After slowThing() @ " + getElapsed() + "ms");
 		return Promise.resolve(value);
