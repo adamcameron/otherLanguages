@@ -1,20 +1,10 @@
 // race.js
-startTime = new Date();
-
-delayer = function(task){
-	return setTimeout(task, 1000);
-};
-
-function getElapsed(){
-	return new Date() - startTime;	
-}
-
 
 promiseGenerator = {};
 promiseGenerator[Symbol.iterator] = function*(){
 	var count = 0;
 	while (++count <= 5){
-		console.log("yielding");
+		console.log("yielding with (" + count + ")");
 		yield getIndexedPromise(count);
 	}
 };
@@ -22,24 +12,21 @@ promiseGenerator[Symbol.iterator] = function*(){
 
 getIndexedPromise = function(index){
 	return new Promise(function(resolve,reject){
-		delayer(function(){
-			console.log("(" + index + ") Promise executor @ " + getElapsed());
-			resolve(index);
-		});
+		console.log("(" + index + ") Promise executor");
+		resolve(index);
 	}).then(function(value){
-		return delayer(function(){
-			console.log("(" + value + ") then() resolver @ " + getElapsed());
-			return Promise.resolve(value);
-		});
+		slowThing("(" + value + ") then() resolver");
+		return Promise.resolve(value);
 	});
 };
 
-console.log("Before finalPromise is created @ " +getElapsed());
+console.log("Before finalPromise is created");
 finalPromise = Promise.race(promiseGenerator);
 
 console.log("Before finalPromise has then() attached");
 finalPromise.then(function(value){
-	console.log("finalPromise's then()'s resolve() called with " + value +  " @ " + getElapsed());
+	console.dir(value);
+	console.log("finalPromise's then()'s resolve() called with " + value);
 });
 console.log("End of processing");
 

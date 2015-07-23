@@ -1,15 +1,5 @@
 // slowWithNoResolve.js
 
-slowThing = function(){
-	console.log("Beginning of slowThing() process");
-	var startTime=new Date();
-	var words = ulyssesExtract.replace(/(\b\w+\b)(?=.*\1)/gi, "").replace(/\s+/g," ");
-	var endTime = new Date();
-	var elapsed = endTime - startTime;
-	console.log("After slowThing() process (" + elapsed + "ms)\n\n\n");
-};
-
-
 var startTime=new Date();
 console.log("Before promise");
 
