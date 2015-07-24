@@ -1,5 +1,5 @@
-// raceViaArray.js
+// allViaArray.js
 
 require("../ulysses.js");
 require("../slowThing.js");
-require("../raceViaArray.js");
+require("../allViaArray.js");
