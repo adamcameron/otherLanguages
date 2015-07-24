@@ -5,5 +5,5 @@ slowThing = function(label){
 	var words = ulyssesExtract.replace(/(\b\w+\b)(?=.*\1)/gi, "").replace(/\s+/g," ");
 	var endTime = new Date();
 	var elapsed = endTime - startTime;
-	console.log("After slowThing(\"" + label + "\") process (" + elapsed + "ms)\n\n\n");
+	console.log("After slowThing(\"" + label + "\") process (" + elapsed + "ms)\n\n");
 };
