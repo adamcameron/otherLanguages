@@ -1,26 +1,123 @@
-page load
-	-> load settings
-	-> get properties
-		-> do CHANGEPAGE(1)
-			-> activate controls (stops listening for change page)
-                                                                
-CHANGEPAGE
-	-> change page setting (page=n)
-		-> render page
-		-> render pagination
-                                                                                
+init.js
+on:sortChanged
+	-> omnitureCitySearchEvents.js
+		-> onSortChanged()
 
-change sort
-	-> change setting (sort)
-		-> sort
-			-> do CHANGEPAGE(1)
-                                                     
-change filter
-	-> change settings (filters)
-		-> filter
-			-> sort
+trigger:doSearchRequest
+	-> remoteProxy.js
+		-> on:doearchRequest
+			-> doSearchRequestHandler()
+				-> requestSearchResults()
+					-> $.getJson()
+						-> onSuccessfulRequest()
+							-> trigger:dataReady
+								-> errorMessages.js
+									-> toggleNoResultsMessage()
+								-> listing.js
+									-> dataReadyHandler()
+										-> [trigger:changePage]
+								-> map.js
+									-> init()
+								-> marketing.js
+									-> initialiseCriteo()
+								-> pagination.js
+									-> dataReadyHandler()
+								-> sorter.js
+									-> dataReadyHandler()
+										-> trigger:initialSortNeeded
+											-> listing.js
+												-> initialSortNeededHandler()
+							-> trigger:initFilters
+								-> filters.js
+									-> initFiltersHandler()
+					-> [trigger:settingsChanged]
 
 
-resize page
-	-> change page size setting
-		-> do CHANGEPAGE(1)
+sorter.js
+on:click
+	-> clickHandler()
+		-> [trigger:settingsChanged]
+		-> trigger:sortChanged
+			-> init.js
+				-> omnitureCitySearchEvents.js
+					-> onSortChanged()
+		-> [doSortHandler()]
+
+
+pagination.js
+pageSize
+	-> on:click
+		-> pageSizeClickHandler()
+			-> this.paginationContainer.pagination() (I DO NOT FOLLOW THIS LOGIC)
+pagination
+	-> on:changePage
+		-> [changePageHandler()]
+
+
+filters.js
+on:change
+	-> changeHandler()
+		-> TODO CHECK INDIVIDUAL FILTERS
+		-> [trigger:settingsChanged]
+		-> [trigger:doFilter]
+
+on:click (reset)
+	-> resetFiltersHandler()
+		-> [trigger:settingsChanged]
+		-> [trigger:doFilter]
+	
+map.js
+on:click (property)
+	-> trigger:showMap
+		-> searchResultsMenu.js
+			-> showMapView()
+	-> trigger:showPropertyOnMap
+		-> map.js
+			-> showPropertyOnMap()
+				-> trigger: window.resize
+					-> mapResizer.js
+
+
+searchResultsMenu.js					
+on:click (showMap)
+	-> showMapView()
+
+
+[trigger:settingsChanged]
+	-> settings.js
+		-> settingsChangedHandler()
+
+		
+[doSortHandler()]
+	-> trigger:sortProperties
+		-> listing.js
+			-> sortPropertiesHandler()
+				-> [trigger:changePage]
+
+[trigger:changePage]
+	-> pagination.js
+		[changePageHandler()]
+
+[changePageHandler()]
+	-> [trigger:settingsChanged]
+	-> trigger:renderPage
+		-> listing.js
+			-> renderPageHandler()
+				-> trigger:saveSettings
+					-> settings.js
+						-> saveSettingsHandler()
+				-> trigger:resultsReady
+					-> errorMessages.js
+						->toggleFilterResultsMessage()
+		-> pagination.js
+			-> updatePaginationHandler()
+	-> this.paginationContainer.pagination()  (I DO NOT FOLLOW THIS LOGIC)
+
+[trigger:doFilter]
+	-> listing.js
+		-> doFilterHandler()
+			-> trigger:doSort
+				-> sorter.js
+					-> [doSortHandler()]
+	-> maps.js
+		-> updateMarkers()
