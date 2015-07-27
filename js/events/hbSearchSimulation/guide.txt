@@ -11,10 +11,8 @@ trigger:doSearchRequest
 									-> toggleNoResultsMessage()
 								-> listing.js
 									-> dataReadyHandler()
-										-> ? initialSortNeeded
-											-> sortPropertiesHandler()
-												-> [trigger:changePage]
-										-> [trigger:changePage]
+										-> eventHandlers.js
+											-> [dataReadyQueue()]
 								-> map.js
 									-> init()
 								-> marketing.js
@@ -23,9 +21,8 @@ trigger:doSearchRequest
 									-> dataReadyHandler()
 								-> sorter.js
 									-> dataReadyHandler()
-										-> trigger:initialSortNeeded
-											-> listing.js
-												-> initialSortNeededHandler()
+										-> eventHandlers.js
+											-> [dataReadyQueue()]
 							-> trigger:initFilters
 								-> filters.js
 									-> initFiltersHandler()
@@ -120,3 +117,14 @@ on:click (showMap)
 					-> [doSortHandler()]
 	-> maps.js
 		-> updateMarkers()
+
+[dataReadyQueue()]
+	-> sort & listing complete?
+		-> trigger:dataPreparationComplete
+			-> listing.js
+				-> dataPreparationCompleteHandler()
+					-> needs sort?
+						-> true
+							-> [doSortHandler()]
+						-> false
+							-> [trigger:changePage]
