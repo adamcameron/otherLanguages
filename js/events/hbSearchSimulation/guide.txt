@@ -11,6 +11,9 @@ trigger:doSearchRequest
 									-> toggleNoResultsMessage()
 								-> listing.js
 									-> dataReadyHandler()
+										-> ? initialSortNeeded
+											-> sortPropertiesHandler()
+												-> [trigger:changePage]
 										-> [trigger:changePage]
 								-> map.js
 									-> init()
