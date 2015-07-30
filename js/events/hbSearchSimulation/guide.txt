@@ -11,21 +11,16 @@ trigger:doSearchRequest
 									-> toggleNoResultsMessage()
 								-> listing.js
 									-> dataReadyHandler()
-										-> eventHandlers.js
-											-> [dataReadyQueue()]
+										-> trigger:propertiesReady
+											-> filters.js
+												-> propertiesReadyHandler()
+													-> [trigger:doFilter]
 								-> map.js
 									-> init()
 								-> marketing.js
 									-> initialiseCriteo()
 								-> pagination.js
 									-> dataReadyHandler()
-								-> sorter.js
-									-> dataReadyHandler()
-										-> eventHandlers.js
-											-> [dataReadyQueue()]
-							-> trigger:initFilters
-								-> filters.js
-									-> initFiltersHandler()
 					-> [trigger:settingsChanged]
 
 
@@ -128,3 +123,10 @@ on:click (showMap)
 							-> [doSortHandler()]
 						-> false
 							-> [trigger:changePage]
+
+settings.js
+	-> init()
+		-> getCurrentSettings()
+			-> trigger:actualSettingsLoaded
+				-> sorter.js
+					-> actualSettingsLoadedHandler()
