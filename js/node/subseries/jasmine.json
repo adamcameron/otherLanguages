@@ -1,6 +1,6 @@
 {
-  "spec_dir": ".",
-    "spec_files": [
-        "seriesSpec.js"
-    ]
+	"spec_dir": ".",
+	"spec_files": [
+		"seriesSpec.js"
+	]
 }
