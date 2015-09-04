@@ -1,9 +1,11 @@
 <?php
+// closure.php
+
 $numbers = ["a","b","c","d","e"];
 $remappedNumbers = array_map(function($number) use (&$numbers){
-	$theseNumbers = $numbers;
+	$localCopyOfTheseNumbers = $numbers;
 	array_shift($numbers);
-	return $theseNumbers;
+	return $localCopyOfTheseNumbers;
 }, $numbers);
 
 foreach ($remappedNumbers as $series) {

@@ -1,7 +1,9 @@
+# common.py
+
 numbers = ["a","b","c","d","e"]
 
 def mapper(number):
 	global numbers
-	theseNumbers = numbers[:]
+	localCopyOfTheseNumbers = numbers[:]
 	numbers.pop(0)
-	return theseNumbers
+	return localCopyOfTheseNumbers

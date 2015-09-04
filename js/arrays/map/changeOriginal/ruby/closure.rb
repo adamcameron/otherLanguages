@@ -1,8 +1,10 @@
+# closure.rb
+
 numbers = ["a","b","c","d","e"]
 remappedNumbers = numbers.map do |number|
-	theseNumbers = numbers.clone
+	localCopyOfTheseNumbers = numbers.clone
 	numbers.shift
-	theseNumbers
+	localCopyOfTheseNumbers
 end
 
 remappedNumbers.each do |series|

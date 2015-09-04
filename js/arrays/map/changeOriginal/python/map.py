@@ -1,3 +1,5 @@
+# map.py
+
 from common import numbers, mapper
 
 remappedNumbers = map(mapper, numbers)

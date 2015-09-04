@@ -1,8 +1,10 @@
+// example.groovy
+
 numbers = ["a","b","c","d","e"];
 remappedNumbers = numbers.collect([]){
-	theseNumbers = numbers
+	localCopyOfTheseNumbers = numbers
 	numbers.leftShift()
-	return theseNumbers
+	return localCopyOfTheseNumbers
 }
 
 remappedNumbers.each() {
