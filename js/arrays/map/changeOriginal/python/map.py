@@ -7,3 +7,6 @@ remappedNumbers = map(mapper, numbers)
 for series in remappedNumbers:
 	print(" ".join(series))
 
+print("=============")
+for series in remappedNumbers:
+	print(" ".join(numbers))

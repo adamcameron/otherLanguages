@@ -11,3 +11,5 @@ $remappedNumbers = array_map(function($number) use (&$numbers){
 foreach ($remappedNumbers as $series) {
 	echo join($series, " ") . "\n";
 }
+
+var_dump($numbers);
