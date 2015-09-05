@@ -7,6 +7,3 @@ remappedLetters = map(mapper, letters)
 for series in remappedLetters:
 	print(" ".join(series))
 
-print("=============")
-for series in remappedLetters:
-	print(" ".join(letters))
