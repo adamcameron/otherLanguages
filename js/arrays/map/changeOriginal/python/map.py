@@ -1,12 +1,12 @@
 # map.py
 
-from common import numbers, mapper
+from common import letters, mapper
 
-remappedNumbers = map(mapper, numbers)
+remappedLetters = map(mapper, letters)
 
-for series in remappedNumbers:
+for series in remappedLetters:
 	print(" ".join(series))
 
 print("=============")
-for series in remappedNumbers:
-	print(" ".join(numbers))
+for series in remappedLetters:
+	print(" ".join(letters))

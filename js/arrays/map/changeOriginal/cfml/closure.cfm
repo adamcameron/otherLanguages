@@ -1,13 +1,13 @@
 <cfscript>
 // closure.cfm
 
-numbers = ["a","b","c","d","e"];
-remappedNumbers = numbers.map(function(number,index){
-	var localCopyOfTheseNumbers = duplicate(numbers);
-	numbers.deleteAt(1);
-	return localCopyOfTheseNumbers;
+letters = ["a","b","c","d","e"];
+remappedLetters = letters.map(function(number,index){
+	var localCopyOfTheseLetters = duplicate(letters);
+	letters.deleteAt(1);
+	return localCopyOfTheseLetters;
 });
-remappedNumbers.each(function(series){
+remappedLetters.each(function(series){
 	writeOutput(series.toList(" ") & "<br>");
 });	
 </cfscript>

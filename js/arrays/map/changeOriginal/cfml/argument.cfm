@@ -1,13 +1,13 @@
 <cfscript>
 // argument.cfm
 
-numbers = ["a","b","c","d","e"];
-remappedNumbers = numbers.map(function(number,index,numbersAsArgument){
-	var localCopyOfTheseNumbers = duplicate(numbersAsArgument);
-	numbersAsArgument.deleteAt(1);
-	return localCopyOfTheseNumbers;
+letters = ["a","b","c","d","e"];
+remappedLetters = letters.map(function(number,index,lettersAsArgument){
+	var localCopyOfTheseLetters = duplicate(lettersAsArgument);
+	lettersAsArgument.deleteAt(1);
+	return localCopyOfTheseLetters;
 });
-remappedNumbers.each(function(series){
+remappedLetters.each(function(series){
 	writeOutput(series.toList(" ") & "<br>");
 });	
 </cfscript>

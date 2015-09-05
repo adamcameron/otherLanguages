@@ -1,8 +1,8 @@
 # comprehension.py
 
-from common import numbers, mapper
+from common import letters, mapper
 
-remappedNumbers = [mapper(number) for number in numbers]
+remappedLetters = [mapper(number) for number in letters]
 
-for series in remappedNumbers:
+for series in remappedLetters:
 	print(" ".join(series))

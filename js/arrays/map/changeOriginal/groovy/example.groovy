@@ -1,12 +1,12 @@
 // example.groovy
 
-numbers = ["a","b","c","d","e"];
-remappedNumbers = numbers.collect([]){
-	localCopyOfTheseNumbers = numbers
-	numbers.leftShift()
-	return localCopyOfTheseNumbers
+letters = ["a","b","c","d","e"];
+remappedLetters = letters.collect([]){
+	localCopyOfTheseLetters = letters
+	letters.leftShift()
+	return localCopyOfTheseLetters
 }
 
-remappedNumbers.each() {
+remappedLetters.each() {
 	println(it)
 }

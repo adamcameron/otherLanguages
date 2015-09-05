@@ -1,11 +1,11 @@
 // closure.js
 
-var numbers = ["a","b","c","d","e"];
-var remappedNumbers = numbers.map(function(number,index){
-	var localCopyOfTheseNumbers = numbers.slice();
-	numbers.shift();
-	return localCopyOfTheseNumbers;
+var letters = ["a","b","c","d","e"];
+var remappedLetters = letters.map(function(number,index){
+	var localCopyOfTheseLetters = letters.slice();
+	letters.shift();
+	return localCopyOfTheseLetters;
 });
-remappedNumbers.forEach(function(series){
+remappedLetters.forEach(function(series){
 	console.log(series.join(" "));
 });	

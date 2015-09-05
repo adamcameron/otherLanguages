@@ -1,15 +1,15 @@
 <?php
 // closure.php
 
-$numbers = ["a","b","c","d","e"];
-$remappedNumbers = array_map(function($number) use (&$numbers){
-	$localCopyOfTheseNumbers = $numbers;
-	array_shift($numbers);
-	return $localCopyOfTheseNumbers;
-}, $numbers);
+$letters = ["a","b","c","d","e"];
+$remappedLetters = array_map(function($number) use (&$letters){
+	$localCopyOfTheseLetters = $letters;
+	array_shift($letters);
+	return $localCopyOfTheseLetters;
+}, $letters);
 
-foreach ($remappedNumbers as $series) {
+foreach ($remappedLetters as $series) {
 	echo join($series, " ") . "\n";
 }
 
-var_dump($numbers);
+var_dump($letters);
