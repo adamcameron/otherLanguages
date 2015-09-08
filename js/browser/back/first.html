@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title></title>
+</head>
+<body>
+<button onclick="handler()">click me</button>
+<a href="./second.html">move on</a>
+</body>
+<script>
+if (typeof counter == "undefined"){
+	console.log("counter was not defined");
+	counter = 0;
+}else{
+	console.log("counter = " + counter);
+}
+
+handler = function(){
+	counter++;
+	console.log(counter);
+};
+</script>
+</html>

@@ -1,7 +1,7 @@
 init.js
 trigger:doSearchRequest
 	-> remoteProxy.js
-		-> on:doearchRequest
+		-> on:doSearchRequest
 			-> doSearchRequestHandler()
 				-> requestSearchResults()
 					-> $.getJson()
