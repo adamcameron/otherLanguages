@@ -6,4 +6,3 @@ remappedLetters = map(mapper, letters)
 
 for series in remappedLetters:
 	print(" ".join(series))
-

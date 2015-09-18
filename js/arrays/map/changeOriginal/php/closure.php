@@ -11,5 +11,3 @@ $remappedLetters = array_map(function($number) use (&$letters){
 foreach ($remappedLetters as $series) {
 	echo join($series, " ") . "\n";
 }
-
-var_dump($letters);
