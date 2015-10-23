@@ -6,11 +6,9 @@ import java.lang.reflect.Field;
 public class MemoryAddress {
 
 	public static Unsafe getUnsafe() throws NoSuchFieldException, IllegalAccessException {
-		//try {
-			Field f = Unsafe.class.getDeclaredField("theUnsafe");
-			f.setAccessible(true);
-			return (Unsafe)f.get(null);
-		//} catch (Exception e) { /* ... */ }
+		Field f = Unsafe.class.getDeclaredField("theUnsafe");
+		f.setAccessible(true);
+		return (Unsafe)f.get(null);
 	}
 
 	public static void printAddresses(String label, Object... objects) throws NoSuchFieldException, IllegalAccessException {
@@ -42,7 +40,16 @@ public class MemoryAddress {
 		System.out.println();
 	}
 
-	public static String getAddress(Object... objects) throws NoSuchFieldException, IllegalAccessException {
+	public static String getAddressFromArray(Object... objects) throws NoSuchFieldException, IllegalAccessException {
+		Unsafe unsafe = getUnsafe();
+		int offset = unsafe.arrayBaseOffset(objects.getClass());
+		long factor = 8;
+		final long i1 = (unsafe.getInt(objects, offset) & 0xFFFFFFFFL) * factor;
+		return Long.toHexString(i1);
+	}
+
+	public static String getAddress(Object object) throws NoSuchFieldException, IllegalAccessException {
+		Object[] objects = {object};
 		Unsafe unsafe = getUnsafe();
 		int offset = unsafe.arrayBaseOffset(objects.getClass());
 		long factor = 8;
