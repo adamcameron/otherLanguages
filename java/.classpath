@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="head_first/project1/src/|head_first/chap5/src/|head_first/beerV1/src/|testing/" kind="src" path=""/>
+	<classpathentry kind="src" path="head_first/beerV1/src"/>
+	<classpathentry kind="src" path="head_first/chap5/src"/>
+	<classpathentry kind="src" path="head_first/project1/src"/>
+	<classpathentry kind="src" path="testing"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="testing"/>
+</classpath>
