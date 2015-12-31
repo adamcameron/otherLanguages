@@ -7,3 +7,5 @@
 **/composer.lock
 **/*.sublime-*
 **/cache/**
+**/*.jar
+**/*.class
