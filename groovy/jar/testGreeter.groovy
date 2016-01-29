@@ -1,3 +1,5 @@
+// testGreeter.groovy
+
 import me.adamcameron.greetingapp.*
 
 greeter = new Greeter()
