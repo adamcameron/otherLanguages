@@ -1,63 +1,29 @@
-print "empty string: "
-if ("") {
-	println "truthy"
-}else{
-	println "falsy"
-}
 print "populated string: "
-if (" ") {
-	println "truthy"
-}else{
-	println "falsy"
-}
+println " " ? "truthy" : "falsy" 
+
+print "empty string: "
+println "" ? "truthy" : "falsy" 
 println "============="
+
+print "non-zero: "
+println (-1 ? "truthy" : "falsy") 
 
 print "zero: "
-if (0) {
-	println "truthy"
-}else{
-	println "falsy"
-}
-print "non-zero: "
-if (-1) {
-	println "truthy"
-}else{
-	println "falsy"
-}
+println 0 ? "truthy" : "falsy" 
 println "============="
+
+print "populated collection: "
+println([null] ? "truthy" : "falsy") 
 
 print "empty collection: "
-if ([]) {
-	println "truthy"
-}else{
-	println "falsy"
-}
-print "populated collection: "
-if ([null]) {
-	println "truthy"
-}else{
-	println "falsy"
-}
+println([] ? "truthy" : "falsy") 
 println "============="
 
-print "empty map: "
-if ({}) {
-	println "truthy"
-}else{
-	println "falsy"
-}
 print "populated map: "
-if ({key:""}) {
-	println "truthy"
-}else{
-	println "falsy"
-}
-print "populated map (null value): "
-if ({key:null}) {
-	println "truthy"
-}else{
-	println "falsy"
-}
+println([key:""] ? "truthy" : "falsy") 
+
+print "empty map: "
+println([:] ? "truthy" : "falsy")
 println "============="
 
 class Test{
@@ -73,15 +39,8 @@ class Test{
 }
 
 print "truthy object: "
-if (new Test("truthy")) {
-	println "truthy"
-}else{
-	println "falsy"
-}
-print "falsy object: "
-if (new Test("anything else")) {
-	println "truthy"
-}else{
-	println "falsy"
-}
+println new Test("truthy") ? "truthy" : "falsy" 
 
+print "falsy object: "
+println new Test("anything else") ? "truthy" : "falsy" 
+println "============="
