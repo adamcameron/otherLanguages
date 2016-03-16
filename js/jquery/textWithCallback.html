@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+</head>
+<body>
+
+<ol id="numberList">
+<li>One</li>
+<li>Two</li>
+<li>Three</li>
+<li>Four</li>
+</ol>
+<button id="addMaori">Add Maori</button>
+
+<script>
+$("#addMaori").on("click", function(){
+	var maori = ["tahi", "rua", "toru", "wha"];
+	$("#numberList li").text(function(i, v){
+		return v + " (" + maori[i] + ")";
+	});
+});
+</script>
+</body>
+</html>
+
