@@ -32,9 +32,3 @@ Page.prototype.clickHandlerUsingBind = function(e){
 	console.log("'e' refers to the button that triggered the event: " + $(e.target).text());
 	console.log("'this' still refers to the Page object: " + this.page);
 };
-
-$(document).ready(function(){
-	page = new Page("Home page");
-	
-	Page.bindHandlers(page);
-});
