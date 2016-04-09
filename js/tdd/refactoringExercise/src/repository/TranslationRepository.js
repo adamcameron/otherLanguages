@@ -1,7 +1,7 @@
 me.adamcameron.refactoring.repository = me.adamcameron.refactoring.repository || {};
 
-me.adamcameron.refactoring.repository.TranslationRepository = function(){
-	var translations = {
+me.adamcameron.refactoring.repository.TranslationRepository = function(availableBundles){
+	var allBundles = {
 		primary : {
 			one : "tahi",
 			two : "rua",
@@ -25,11 +25,17 @@ me.adamcameron.refactoring.repository.TranslationRepository = function(){
 		}
 	};
 
+	availableBundles = availableBundles || [];
+	var bundles = Object.keys(allBundles).reduce(function(bundles, bundle){
+		bundles[bundle] = availableBundles.indexOf(bundle) >=0 ? allBundles[bundle] : null;
+		return bundles;
+	}, {});
+
 	var TranslationRepository = function(){};
 
 	TranslationRepository.prototype.loadBundle = function(bundle){
-		if (translations.hasOwnProperty(bundle)) {
-			return translations[bundle];
+		if (bundles.hasOwnProperty(bundle)) {
+			return bundles[bundle];
 		}
 		throw new me.adamcameron.refactoring.repository.TranslationRepository.BundleNotFoundException(bundle);
 	};

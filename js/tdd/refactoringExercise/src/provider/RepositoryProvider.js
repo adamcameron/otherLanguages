@@ -6,7 +6,7 @@ me.adamcameron.refactoring.provider.RepositoryProvider.prototype.register = func
 	require("../repository/TranslationRepository.js");
 
 	app.repository = {
-		translation : new me.adamcameron.refactoring.repository.TranslationRepository()
+		translation : new me.adamcameron.refactoring.repository.TranslationRepository(["primary", "secondary"])
 	};
 
 	return app;

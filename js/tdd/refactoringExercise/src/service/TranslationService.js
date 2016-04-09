@@ -35,7 +35,6 @@ me.adamcameron.refactoring.service.TranslationService = function(config, cacheSe
 			for (var translationKey in rawTranslations.secondary){
 				applyTranslation("secondary", rawTranslations, translationKey);
 			}
-
 			cacheService.put(cacheKeyPrimary, translations.primary);
 			cacheService.put(cacheKeySecondary, translations.secondary);
 		}
