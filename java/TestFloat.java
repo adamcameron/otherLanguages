@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+class TestFloat {
+
+	public static void main(String[] args){
+		Double x = 326.72;
+		Double y = 100.0;
+		Double z = x * y;
+		Integer i = z.intValue();
+		
+		System.out.println(z);
+		System.out.println(i);
+	}
+}
+=======
 public class TestFloat {
 
 	private float f1 = (float)123.45;
@@ -21,3 +35,4 @@ public class TestFloat {
 	public boolean getB2() {return b2;}
 
 }
+>>>>>>> 51bc0bae19d027f921a4de3a6c0ca6dd7a4ffe72
