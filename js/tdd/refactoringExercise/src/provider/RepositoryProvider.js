@@ -1,13 +1,13 @@
-me.adamcameron.refactoring.provider = me.adamcameron.refactoring.provider || {};
+var RepositoryProvider = function(){};
 
-me.adamcameron.refactoring.provider.RepositoryProvider = function(){};
-
-me.adamcameron.refactoring.provider.RepositoryProvider.prototype.register = function(app){
-	require("../repository/TranslationRepository.js");
+RepositoryProvider.prototype.register = function(app){
+	var TranslationRepository = require("../repository/TranslationRepository.js");
 
 	app.repository = {
-		translation : new me.adamcameron.refactoring.repository.TranslationRepository(["primary", "secondary"])
+		translation : new TranslationRepository(["primary", "secondary"])
 	};
 
 	return app;
 };
+
+module.exports = RepositoryProvider;

@@ -1,16 +1,14 @@
-me.adamcameron.refactoring.provider = me.adamcameron.refactoring.provider || {};
-
-me.adamcameron.refactoring.provider.ServiceProvider = function(config){
+var ServiceProvider = function(config){
 	this.config = config;
 };
 
-me.adamcameron.refactoring.provider.ServiceProvider.prototype.register = function(app){
-	require("../service/CacheService.js");
-	require("../service/TranslationService.js");
+ServiceProvider.prototype.register = function(app){
+	var CacheService = require("../service/CacheService.js");
+	var TranslationService = require("../service/TranslationService.js");
 
 	app.service = {};
-	app.service.cache = new me.adamcameron.refactoring.service.CacheService(this.config.cache);
-	app.service.translation = new me.adamcameron.refactoring.service.TranslationService(
+	app.service.cache = new CacheService(this.config.cache);
+	app.service.translation = new TranslationService(
 		this.config.translation,
 		app.service.cache,
 		app.repository.translation
@@ -18,3 +16,5 @@ me.adamcameron.refactoring.provider.ServiceProvider.prototype.register = functio
 
 	return app;
 };
+
+module.exports = ServiceProvider;

@@ -1,6 +1,4 @@
-me.adamcameron.refactoring.repository = me.adamcameron.refactoring.repository || {};
-
-me.adamcameron.refactoring.repository.TranslationRepository = function(availableBundles){
+var TranslationRepository = function(availableBundles){
 	var allBundles = {
 		primary : {
 			one : "tahi",
@@ -37,12 +35,14 @@ me.adamcameron.refactoring.repository.TranslationRepository = function(available
 		if (bundles.hasOwnProperty(bundle)) {
 			return bundles[bundle];
 		}
-		throw new me.adamcameron.refactoring.repository.TranslationRepository.BundleNotFoundException(bundle);
+		throw new BundleNotFoundException(bundle);
 	};
 	return new TranslationRepository();
 };
 
-me.adamcameron.refactoring.repository.TranslationRepository.BundleNotFoundException = function(bundle){
+var BundleNotFoundException = function(bundle){
 	this.message = bundle + " does not exist in repository";
-	this.name = "me.adamcameron.refactoring.service.TranslationRepository.BundleNotFoundException";
+	this.name = "service.TranslationRepository.BundleNotFoundException";
 };
+
+module.exports = TranslationRepository;

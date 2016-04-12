@@ -1,4 +1,4 @@
-me.adamcameron.refactoring.Config = function(){
+var Config = function(){
 	this.cache = {
 		active : true
 	};
@@ -10,3 +10,5 @@ me.adamcameron.refactoring.Config = function(){
 		enabled : true
 	}
 };
+
+module.exports = Config;

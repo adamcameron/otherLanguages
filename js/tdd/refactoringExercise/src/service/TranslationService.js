@@ -1,6 +1,4 @@
-me.adamcameron.refactoring.service = me.adamcameron.refactoring.service || {};
-
-me.adamcameron.refactoring.service.TranslationService = function(config, cacheService, translationRepository){
+var TranslationService = function(config, cacheService, translationRepository){
 	var config = config;
 	var cacheService = cacheService;
 	var translationRepository = translationRepository;
@@ -59,4 +57,4 @@ me.adamcameron.refactoring.service.TranslationService = function(config, cacheSe
 	return translationService;
 };
 
-
+module.exports = TranslationService;
