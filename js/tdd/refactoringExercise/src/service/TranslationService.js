@@ -53,7 +53,7 @@ var TranslationService = function(config, cacheService, translationRepository){
 	};
 
 	var translationService = new TranslationService();
-	translationService.initialise()
+	translationService.initialise();
 	return translationService;
 };
 
