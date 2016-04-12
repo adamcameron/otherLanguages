@@ -36,7 +36,6 @@ var TranslationService = function(config, cacheService, translationRepository){
 				translations.secondary = translations.secondary || {};
 				translations.secondary[key] = rawTranslations.secondary[key];
 			}
-console.dir(translations);
 			cacheService.put(cacheKeyPrimary, translations.primary);
 			cacheService.put(cacheKeySecondary, translations.secondary);
 		}
