@@ -58,5 +58,3 @@ me.adamcameron.refactoring.service.TranslationService = function(config, cacheSe
 	translationService.initialise()
 	return translationService;
 };
-
-
