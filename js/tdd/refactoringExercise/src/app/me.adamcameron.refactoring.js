@@ -1,5 +1,0 @@
-me = {
-	adamcameron : {
-		refactoring : {}
-	}
-};

@@ -1,6 +1,5 @@
-require("./app/me.adamcameron.refactoring.js");
-require("./app/App.js");
-var app = new me.adamcameron.refactoring.App();
+var App = require("./app/App.js");
+var app = new App();
 
 var translation = app.service.translation.translate("Zachary");
 console.log(translation);

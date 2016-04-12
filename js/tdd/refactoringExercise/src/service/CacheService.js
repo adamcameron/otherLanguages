@@ -1,6 +1,4 @@
-me.adamcameron.refactoring.service = me.adamcameron.refactoring.service || {};
-
-me.adamcameron.refactoring.service.CacheService = function(config){
+var CacheService = function(config){
 	var cache = {};
 	var active = config.active;
 
@@ -21,13 +19,15 @@ me.adamcameron.refactoring.service.CacheService = function(config){
 		if (this.exists(key)){
 			return cache[key];
 		}
-		throw new me.adamcameron.refactoring.service.CacheService.KeyNotFoundException(key);
+		throw new KeyNotFoundException(key);
 	};
 
 	return new CacheService();
 };
 
-me.adamcameron.refactoring.service.CacheService.KeyNotFoundException = function(key){
+var KeyNotFoundException = function(key){
 	this.message = key + " not found in cache";
-	this.name = "me.adamcameron.refactoring.service.CacheService.KeyNotFoundException";
+	this.name = "service.CacheService.KeyNotFoundException";
 };
+
+module.exports = CacheService;
