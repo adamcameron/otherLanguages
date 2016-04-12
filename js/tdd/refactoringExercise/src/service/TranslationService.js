@@ -26,21 +26,20 @@ var TranslationService = function(config, cacheService, translationRepository){
 				primary : translationRepository.loadBundle("primary"),
 				secondary : translationRepository.loadBundle("secondary")
 			};
+
 			for (var translationKey in rawTranslations.primary){
-				applyTranslation("primary", rawTranslations, translationKey);
+				translations.primary = translations.primary || {};
+				translations.primary[key] = rawTranslations.primary[key];
 			}
 
 			for (var translationKey in rawTranslations.secondary){
-				applyTranslation("secondary", rawTranslations, translationKey);
+				translations.secondary = translations.secondary || {};
+				translations.secondary[key] = rawTranslations.secondary[key];
 			}
+console.dir(translations);
 			cacheService.put(cacheKeyPrimary, translations.primary);
 			cacheService.put(cacheKeySecondary, translations.secondary);
 		}
-	};
-
-	var applyTranslation = function(bundle, rawTranslations, key){
-		translations[bundle] = translations[bundle] || {};
-		translations[bundle][key] = rawTranslations[bundle][key];
 	};
 
 	TranslationService.prototype.translate = function(key){

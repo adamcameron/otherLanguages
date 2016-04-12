@@ -3,7 +3,7 @@ describe("This is a minimal spec of SomeService", function(){
     var someService = new SomeService();
 
     it("can be instantiated", function(){
-        expect(someService).toEqual(jasmine.any(SomeService));
+        expect(someService instanceof SomeService).toBe(true);
     });
 
     it("reverses a string", function(){
