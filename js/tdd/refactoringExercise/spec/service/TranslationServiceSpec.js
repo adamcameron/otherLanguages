@@ -1,24 +1,48 @@
-var translationServiceTests = function(){
+var testHappyPath = function(){
     var dependencies = getTestDependencies();
     var translationService = getTestTranslatorService(dependencies);
+    var mockedBundle = getMockedBundle();
 
-    it("sets the primary translations", function(){
-        //expect(dependencies.cacheService.put).toHaveBeenCalledWith(["MOCKED_TRANSLATIONS_PRIMARY", {}]);
-        expect(dependencies.cacheService.put.calls.argsFor(0)).toBe(["MOCKED_TRANSLATIONS_PRIMARY", {}]);
-        expect(dependencies.cacheService.put.calls.argsFor(1)).toBe(["MOCKED_TRANSLATIONS_SECONDARY", {}]);
+    beforeEach(function(){
+        spyOn(dependencies.translationRepository, "loadBundle").and.returnValue(mockedBundle);
     });
+
+    it("sets the primary translations when the repository provides some", checkExpectations.bind(this, translationService, dependencies, mockedBundle));
 };
+
+var testNoTranslationsBug = function(){
+    var dependencies = getTestDependencies();
+    var translationService = getTestTranslatorService(dependencies);
+    var mockedBundle = {};
+
+    beforeEach(function(){
+        spyOn(dependencies.translationRepository, "loadBundle").and.returnValue(mockedBundle);
+    });
+
+    it("sets the primary translations even when the repository doesn't provide any", checkExpectations.bind(this, translationService, dependencies, mockedBundle));
+};
+
+var checkExpectations = function(translationService, dependencies, mockedBundle){
+    var mockedTtl = getMockedTtl();
+
+    var expectedPrimaryKey = getMockedCacheKeyForBundle("primary");
+
+    translationService.initialise();
+
+    expect(dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
+    expect(dependencies.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, mockedBundle, jasmine.any(String)]);
+};
+
 
 var getTestTranslatorService = function(dependencies){
     var TranslationService = require("../../src/service/TranslationService.js");
     var translationService = new TranslationService(
         dependencies.config.translation,
         dependencies.cacheService,
-        dependencies.translationRepository
+        dependencies.translationRepository,
+        dependencies.requestService
     );
-    beforeEach(function(){
-        spyOn(dependencies.cacheService, "put");
-    });
+
     return translationService;
 };
 
@@ -26,25 +50,28 @@ var getTestDependencies = function(){
     var mockedConfig = getMockedConfig();
     var mockedCacheService = getMockedCacheService();
     var mockedTranslationRepository = getMockedTranslationRepository();
+    var mockedRequestService = getMockedRequestService();
 
     return {
         config : mockedConfig,
         cacheService : mockedCacheService,
-        translationRepository : mockedTranslationRepository
+        translationRepository : mockedTranslationRepository,
+        requestService : mockedRequestService
     };
 };
 
 var getMockedConfig = function(){
     var mockedConfig = {
         cache : {
-            active : true
+            active : false
         },
         translation : {
             bundles : {
                 primary : {cacheKey : "MOCKED_TRANSLATIONS_PRIMARY"},
                 secondary : {cacheKey : "MOCKED_TRANSLATIONS_SECONDARY"}
             },
-            enabled : true
+            enabled : true,
+            ttl : getMockedTtl()
         }
     };
 
@@ -56,6 +83,9 @@ var getMockedCacheService = function(){
     var CacheService = require("../../src/service/CacheService.js");
     var mockedCacheService = new CacheService(mockedConfig.cache);
 
+    beforeEach(function(){
+        spyOn(mockedCacheService, "put");
+    });
 
     return mockedCacheService;
 };
@@ -65,7 +95,38 @@ var getMockedTranslationRepository = function(){
     var mockedTranslationRepository = new TranslationRepository();
 
     return mockedTranslationRepository;
+};
+var getMockedRequestService = function(){
+    var RequestService = require("../../src/service/RequestService.js");
+    var mockedRequestService = new RequestService();
 
+    beforeEach(function(){
+        spyOn(mockedRequestService, "getLocale").and.returnValue(getMockedLocale());
+        spyOn(mockedRequestService, "isTranslatorEnabled").and.returnValue(true);
+    });
+
+    return mockedRequestService;
 };
 
-describe("Tests for TranslationService", translationServiceTests);
+var getMockedBundle = function(){
+    return {mocked:"bundle"};
+};
+
+var getMockedLocale = function(){
+    return "MOCKED_LOCALE";
+};
+
+var getMockedTtl = function(){
+    return "MOCKED_TTL";
+};
+
+var getMockedCacheKeyForBundle = function(bundle){
+    var mockedLocale = getMockedLocale();
+    return "MOCKED_TRANSLATIONS_" + bundle.toUpperCase() + "_" + mockedLocale;
+};
+
+
+describe("Tests for TranslationService", function() {
+    //describe("Tests for the happy path", testHappyPath);
+    describe("Bug tests", testNoTranslationsBug);
+});

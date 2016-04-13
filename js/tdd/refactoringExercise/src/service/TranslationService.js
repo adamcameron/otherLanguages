@@ -1,18 +1,20 @@
-var TranslationService = function(config, cacheService, translationRepository){
+var TranslationService = function(config, cacheService, translationRepository, requestService){
 	var config = config;
 	var cacheService = cacheService;
 	var translationRepository = translationRepository;
+	var requestService = requestService;
 
 	var translations = {};
 
-	var TranslationService = function(){};
 	TranslationService.prototype.initialise = function(){
-		if (!config.enabled){
+		if (!requestService.isTranslatorEnabled()){
 			return;
 		}
 
-		var cacheKeyPrimary = config.bundles["primary"].cacheKey;
-		var cacheKeySecondary = config.bundles["secondary"].cacheKey;
+		var currentLocale = requestService.getLocale();
+
+		var cacheKeyPrimary = getCacheKey("primary", currentLocale);
+		var cacheKeySecondary = getCacheKey("secondary", currentLocale);
 
 		var okToGetFromCache = cacheService.isActive()
 			&& cacheService.exists(cacheKeyPrimary)
@@ -22,22 +24,26 @@ var TranslationService = function(config, cacheService, translationRepository){
 			translations.primary = cacheService.get(cacheKeyPrimary);
 			translations.secondary = cacheService.get(cacheKeySecondary);
 		}else{
+
 			var rawTranslations = {
-				primary : translationRepository.loadBundle("primary"),
-				secondary : translationRepository.loadBundle("secondary")
+				primary : translationRepository.loadBundle("primary", currentLocale),
+				secondary : translationRepository.loadBundle("secondary", currentLocale)
 			};
 
-			for (var translationKey in rawTranslations.primary){
+			for (var key in rawTranslations.primary){
 				translations.primary = translations.primary || {};
 				translations.primary[key] = rawTranslations.primary[key];
 			}
 
-			for (var translationKey in rawTranslations.secondary){
+			for (var key in rawTranslations.secondary){
 				translations.secondary = translations.secondary || {};
 				translations.secondary[key] = rawTranslations.secondary[key];
 			}
-			cacheService.put(cacheKeyPrimary, translations.primary);
-			cacheService.put(cacheKeySecondary, translations.secondary);
+
+			var ttl = config.ttl;
+
+			cacheService.put(cacheKeyPrimary, translations.primary, ttl);
+			cacheService.put(cacheKeySecondary, translations.secondary, ttl);
 		}
 	};
 
@@ -50,9 +56,9 @@ var TranslationService = function(config, cacheService, translationRepository){
 		return key.toUpperCase();
 	};
 
-	var translationService = new TranslationService();
-	translationService.initialise();
-	return translationService;
+	var getCacheKey = function(bundle, locale){
+		return config.bundles[bundle].cacheKey + "_" + locale;
+	}
 };
 
 module.exports = TranslationService;
