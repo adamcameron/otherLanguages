@@ -7,10 +7,12 @@ describe("Tests for TranslationService", function() {
         spyOn(this.mockedCacheService, "put");
         spyOn(this.mockedRequestService, "getLocale").and.returnValue(getMockedLocale());
         spyOn(this.mockedRequestService, "isTranslatorEnabled").and.returnValue(true);
+
+        this.translationService = getTestTranslationService.call(this);
     });
 
     it("sets the primary translations when the repository provides some", function(){
-        setTestTranslationService.call(this);
+
         var mockedTtl = getMockedTtl();
 
         var expectedPrimaryKey = getMockedCacheKeyForBundle("primary");
@@ -22,7 +24,6 @@ describe("Tests for TranslationService", function() {
     });
 
     it("sets the primary translations even when the repository doesn't provide any", function(){
-        setTestTranslationService.call(this);
         var mockedTtl = getMockedTtl();
 
         var expectedPrimaryKey = getMockedCacheKeyForBundle("primary");
@@ -35,9 +36,9 @@ describe("Tests for TranslationService", function() {
 });
 
 
-var setTestTranslationService = function(){
+var getTestTranslationService = function(){
     var TranslationService = require("../../src/service/TranslationService.js");
-    this.translationService = new TranslationService(
+    return new TranslationService(
         this.mockedConfig.translation,
         this.mockedCacheService,
         this.mockedTranslationRepository,
