@@ -29,12 +29,13 @@ var TranslationService = function(config, cacheService, translationRepository, r
 				primary : translationRepository.loadBundle("primary", currentLocale),
 				secondary : translationRepository.loadBundle("secondary", currentLocale)
 			};
-
+			translations.primary = {};
 			for (var key in rawTranslations.primary){
 				translations.primary = translations.primary || {};
 				translations.primary[key] = rawTranslations.primary[key];
 			}
 
+			translations.secondary = {};
 			for (var key in rawTranslations.secondary){
 				translations.secondary = translations.secondary || {};
 				translations.secondary[key] = rawTranslations.secondary[key];
