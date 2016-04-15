@@ -1,4 +1,5 @@
 var testHappyPath = function(){
+    console.log("testHappyPath() called");
     var dependencies = getTestDependencies();
     var translationService = getTestTranslatorService(dependencies);
     var mockedBundle = getMockedBundle();
@@ -11,6 +12,7 @@ var testHappyPath = function(){
 };
 
 var testNoTranslationsBug = function(){
+    console.log("testNoTranslationsBug() called");
     var dependencies = getTestDependencies();
     var translationService = getTestTranslatorService(dependencies);
     var mockedBundle = {};
@@ -51,7 +53,7 @@ var getTestDependencies = function(){
     var mockedCacheService = getMockedCacheService();
     var mockedTranslationRepository = getMockedTranslationRepository();
     var mockedRequestService = getMockedRequestService();
-
+    console.log("getTestDependencies() was run");
     return {
         config : mockedConfig,
         cacheService : mockedCacheService,
@@ -97,10 +99,14 @@ var getMockedTranslationRepository = function(){
     return mockedTranslationRepository;
 };
 var getMockedRequestService = function(){
+
+console.log("getMockedRequestService() was run");
+
     var RequestService = require("../../src/service/RequestService.js");
-    var mockedRequestService = new RequestService();
+    var mockedRequestService = new RequestService({});
 
     beforeEach(function(){
+        console.log("beforeEach() for mockedRequestService called");
         spyOn(mockedRequestService, "getLocale").and.returnValue(getMockedLocale());
         spyOn(mockedRequestService, "isTranslatorEnabled").and.returnValue(true);
     });
@@ -127,6 +133,6 @@ var getMockedCacheKeyForBundle = function(bundle){
 
 
 describe("Tests for TranslationService", function() {
-    //describe("Tests for the happy path", testHappyPath);
-    describe("Bug tests", testNoTranslationsBug);
+    describe("Tests for the happy path", testHappyPath.bind(this));
+    describe("Bug tests", testNoTranslationsBug.bind(this));
 });
