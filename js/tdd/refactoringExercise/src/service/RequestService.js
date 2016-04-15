@@ -1,8 +1,4 @@
 var RequestService = function(app){
-
-    console.log("RequestService constructor called");
-    console.dir(app);
-
     RequestService.prototype.getLocale = function(){
         return app.request.getCurrentLocale();
     };
