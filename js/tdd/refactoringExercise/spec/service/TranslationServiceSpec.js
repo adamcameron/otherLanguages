@@ -6,18 +6,18 @@ describe("Tests for TranslationService", function() {
         var dependencies = getTestDependencies();
 
         spyOn(dependencies.cacheService, "put");
-        spyOn(dependencies.mockedRequestService, "getLocale").and.returnValue(mockedLocale);
-        spyOn(dependencies.mockedRequestService, "isTranslatorEnabled").and.returnValue(true);
+        spyOn(dependencies.requestService, "getLocale").and.returnValue(mockedLocale);
+        spyOn(dependencies.requestService, "isTranslatorEnabled").and.returnValue(true);
 
         this.translationService = getTestTranslationService(dependencies);
-        this.mockedCacheService = dependencies.cacheService;
-        this.mockedTranslationRepository = dependencies.mockedTranslationRepository;
+        this.cacheService = dependencies.cacheService;
+        this.translationRepository = dependencies.translationRepository;
     });
 
     describe("tests with fully-populated bundle", function(){
         beforeEach(function(){
             var mockedBundle = {mocked:"bundle"};
-            spyOn(this.mockedTranslationRepository, "loadBundle").and.returnValue(mockedBundle);
+            spyOn(this.translationRepository, "loadBundle").and.returnValue(mockedBundle);
             this.mockedBundle = mockedBundle;
         });
 
@@ -26,15 +26,15 @@ describe("Tests for TranslationService", function() {
 
             this.translationService.initialise();
 
-            expect(this.mockedCacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.mockedCacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
+            expect(this.cacheService.put.calls.count()).toBeGreaterThan(0);
+            expect(this.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
         });
     });
 
     describe("test with partially-populated bundle", function(){
         beforeEach(function(){
             var mockedBundle = {};
-            spyOn(this.mockedTranslationRepository, "loadBundle").and.returnValue(mockedBundle);
+            spyOn(this.translationRepository, "loadBundle").and.returnValue(mockedBundle);
             this.mockedBundle = mockedBundle;
         });
         
@@ -43,8 +43,8 @@ describe("Tests for TranslationService", function() {
 
             this.translationService.initialise();
 
-            expect(this.mockedCacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.mockedCacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
+            expect(this.cacheService.put.calls.count()).toBeGreaterThan(0);
+            expect(this.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
         });
     });
 });
@@ -58,8 +58,8 @@ var getTestDependencies = function(){
     return {
         mockedConfig : mockedConfig,
         cacheService : cacheService,
-        translationRepository : mockedTranslationRepository,
-        mockedRequestService : mockedRequestService
+        translationRepository : translationRepository,
+        requestService : requestService
     };
 };
 
@@ -67,9 +67,9 @@ var getTestTranslationService = function(dependencies){
     var TranslationService = require("../../src/service/TranslationService.js");
     return new TranslationService(
         dependencies.mockedConfig.translation,
-        dependencies.mockedCacheService,
-        dependencies.mockedTranslationRepository,
-        dependencies.mockedRequestService
+        dependencies.cacheService,
+        dependencies.translationRepository,
+        dependencies.requestService
     );
 };
 
