@@ -1,4 +1,4 @@
-describe("Tests for TranslationService", function() {
+describe("Tests for TranslationProvider", function() {
 
     var mockedLocale = "MOCKED_LOCALE";
 
@@ -9,7 +9,7 @@ describe("Tests for TranslationService", function() {
         spyOn(dependencies.requestService, "getLocale").and.returnValue(mockedLocale);
         spyOn(dependencies.requestService, "isTranslatorEnabled").and.returnValue(true);
 
-        this.translationService = getTestTranslationService(dependencies);
+        this.translationProvider = getTestTranslationProvider(dependencies);
         this.cacheService = dependencies.cacheService;
         this.translationRepository = dependencies.translationRepository;
     });
@@ -24,7 +24,7 @@ describe("Tests for TranslationService", function() {
         it("sets the primary translations when the repository provides some", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            this.translationService.initialise();
+            this.translationProvider.initialise();
 
             expect(this.cacheService.put.calls.count()).toBeGreaterThan(0);
             expect(this.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
@@ -41,7 +41,7 @@ describe("Tests for TranslationService", function() {
         it("sets the primary translations even when the repository doesn't provide any", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            this.translationService.initialise();
+            this.translationProvider.initialise();
 
             expect(this.cacheService.put.calls.count()).toBeGreaterThan(0);
             expect(this.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
@@ -63,9 +63,9 @@ var getTestDependencies = function(){
     };
 };
 
-var getTestTranslationService = function(dependencies){
-    var TranslationService = require("../../src/service/TranslationService.js");
-    return new TranslationService(
+var getTestTranslationProvider = function(dependencies){
+    var TranslationProvider = require("../../src/provider/TranslationProvider.js");
+    return new TranslationProvider(
         dependencies.mockedConfig.translation,
         dependencies.cacheService,
         dependencies.translationRepository,

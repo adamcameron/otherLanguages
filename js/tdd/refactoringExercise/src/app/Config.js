@@ -4,8 +4,12 @@ var Config = function(){
 			primary : {cacheKey : "translations.primary"},
 			secondary : {cacheKey : "translations.secondary"}
 		},
+		enabled : true,
 		ttl : 60
-	}
+	};
+	this.cache = {
+		active : false
+	};
 };
 
 module.exports = Config;

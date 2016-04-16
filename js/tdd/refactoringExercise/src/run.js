@@ -6,7 +6,3 @@ console.log(translation);
 
 var translation = app.service.translation.translate("one");
 console.log(translation);
-
-app.service.translation.initialise();
-var translation = app.service.translation.translate("red");
-console.log(translation);
