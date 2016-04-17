@@ -48,6 +48,9 @@ var TranslationProvider = function(config){
 
         var translationService = translationFactory.getTranslator();
         var arrayLoader = translationFactory.getArrayLoader();
+
+console.dir(arrayLoader.load(translations.primary));
+throw "nope";
         translationService.load(arrayLoader.load(translations.primary), 'primary', currentLocale);
         translationService.load(arrayLoader.load(translations.secondary), 'secondary', currentLocale);
 

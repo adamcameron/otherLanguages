@@ -2,10 +2,6 @@ var Translator = function(){
 
 	var translations = {};
 
-	Translator.prototype.createBundle = function(bundle) {
-		translations[bundle] = {};
-	};
-
 	Translator.prototype.load = function(loader, bundle, locale) {
 		translations[bundle] = loader.get();
 	};

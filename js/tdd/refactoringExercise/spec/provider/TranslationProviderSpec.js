@@ -3,48 +3,82 @@ describe("Tests for TranslationProvider", function() {
     var mockedLocale = "MOCKED_LOCALE";
 
     beforeEach(function(){
-        var dependencies = getTestDependencies();
+        this.dependencies = getTestDependencies();
 
-        spyOn(dependencies.cacheService, "put");
-        spyOn(dependencies.requestService, "getLocale").and.returnValue(mockedLocale);
-        spyOn(dependencies.requestService, "isTranslatorEnabled").and.returnValue(true);
+        spyOn(this.dependencies.cacheService, "put");
+        spyOn(this.dependencies.requestService, "getLocale").and.returnValue(mockedLocale);
+        spyOn(this.dependencies.requestService, "isTranslatorEnabled").and.returnValue(true);
+        spyOn(this.dependencies.mockedArrayLoader, "load");
+        spyOn(this.dependencies.mockedTranslator, "load");
+        spyOn(this.dependencies.translationFactory, "getArrayLoader").and.returnValue(this.dependencies.mockedArrayLoader);
+        spyOn(this.dependencies.translationFactory, "getTranslator").and.returnValue(this.dependencies.mockedTranslator);
 
-        this.translationProvider = getTestTranslationProvider(dependencies);
-        this.cacheService = dependencies.cacheService;
-        this.translationRepository = dependencies.translationRepository;
+        this.translationProvider = getTestTranslationProvider(this.dependencies.mockedConfig);
     });
 
     describe("tests with fully-populated bundle", function(){
         beforeEach(function(){
             var mockedBundle = {mocked:"bundle"};
-            spyOn(this.translationRepository, "loadBundle").and.returnValue(mockedBundle);
+            spyOn(this.dependencies.translationRepository, "loadBundle").and.returnValue(mockedBundle);
             this.mockedBundle = mockedBundle;
         });
 
         it("sets the primary translations when the repository provides some", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            this.translationProvider.initialise();
+            this.translationProvider.initialise(
+                this.dependencies.mockedConfig.translation,
+                this.dependencies.cacheService,
+                this.dependencies.translationRepository,
+                this.dependencies.requestService,
+                this.dependencies.translationFactory
+            );
 
-            expect(this.cacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
+            expect(this.dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
+            expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([
+                expectedPrimaryKey,
+                this.mockedBundle,
+                jasmine.any(String)
+            ]);
+
+            expect(this.dependencies.mockedArrayLoader.load.calls.count()).toEqual(2);
+            expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(0)).toEqual([this.mockedBundle]);
+            expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(1)).toEqual([this.mockedBundle]);
+
+            expect(this.dependencies.mockedTranslator.load.calls.count()).toEqual(2);
+            expect(this.dependencies.mockedTranslator.load.calls.argsFor(0)).toEqual([
+                this.dependencies.mockedArrayLoader,
+                "primary",
+                mockedLocale
+            ]);
+            expect(this.dependencies.mockedTranslator.load.calls.argsFor(1)).toEqual([
+                this.dependencies.mockedArrayLoader,
+                "secondary",
+                mockedLocale
+            ]);
         });
     });
 
     describe("test with partially-populated bundle", function(){
         beforeEach(function(){
             var mockedBundle = {};
-            spyOn(this.translationRepository, "loadBundle").and.returnValue(mockedBundle);
+            spyOn(this.dependencies.translationRepository, "loadBundle").and.returnValue(mockedBundle);
             this.mockedBundle = mockedBundle;
         });
         
         it("sets the primary translations even when the repository doesn't provide any", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            this.translationProvider.initialise();
+            this.translationProvider.initialise(
+                this.dependencies.mockedConfig.translation,
+                this.dependencies.cacheService,
+                this.dependencies.translationRepository,
+                this.dependencies.requestService,
+                this.dependencies.translationFactory
+            );
 
-            expect(this.cacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
+            expect(this.dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
+            expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
         });
     });
 });
@@ -54,23 +88,24 @@ var getTestDependencies = function(){
     var cacheService = getCacheService(mockedConfig);
     var translationRepository = getTranslationRepository();
     var requestService = getRequestService();
+    var translationFactory = getTranslationFactory();
+    var mockedArrayLoader = getMockedArrayLoader();
+    var mockedTranslator = getMockedTranslator();
 
     return {
         mockedConfig : mockedConfig,
         cacheService : cacheService,
         translationRepository : translationRepository,
-        requestService : requestService
+        requestService : requestService,
+        translationFactory : translationFactory,
+        mockedArrayLoader : mockedArrayLoader,
+        mockedTranslator : mockedTranslator
     };
 };
 
-var getTestTranslationProvider = function(dependencies){
+var getTestTranslationProvider = function(config){
     var TranslationProvider = require("../../src/provider/TranslationProvider.js");
-    return new TranslationProvider(
-        dependencies.mockedConfig.translation,
-        dependencies.cacheService,
-        dependencies.translationRepository,
-        dependencies.requestService
-    );
+    return new TranslationProvider(config.translation);
 };
 
 var getMockedConfig = function(){
@@ -104,6 +139,19 @@ var getRequestService = function(){
     return new RequestService({});
 };
 
+var getTranslationFactory = function(){
+    var TranslationFactory = require("../../src/factory/TranslationFactory.js");
+    return new TranslationFactory();
+};
+
 var getMockedCacheKeyForBundle = function(bundle, locale){
     return "MOCKED_TRANSLATIONS_" + bundle.toUpperCase() + "_" + locale;
+};
+
+var getMockedArrayLoader = function(){
+    return {load:function(translations){}};
+};
+
+var getMockedTranslator = function(){
+    return {load:function(loader, bundle, locale){}};
 };
