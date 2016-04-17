@@ -1,14 +1,19 @@
 describe("Tests for TranslationProvider", function() {
 
     var mockedLocale = "MOCKED_LOCALE";
+    var methodStub = function(){};
 
     beforeEach(function(){
         this.dependencies = getTestDependencies();
 
-        spyOn(this.dependencies.cacheService, "put");
         spyOn(this.dependencies.requestService, "getLocale").and.returnValue(mockedLocale);
         spyOn(this.dependencies.requestService, "isTranslatorEnabled").and.returnValue(true);
-        spyOn(this.dependencies.mockedArrayLoader, "load");
+
+        spyOn(this.dependencies.cacheService, "isActive").and.returnValue(false);
+
+        spyOn(this.dependencies.cacheService, "put");
+
+        spyOn(this.dependencies.mockedArrayLoader, "load").and.returnValue(this.dependencies.mockedArrayLoader);
         spyOn(this.dependencies.mockedTranslator, "load");
         spyOn(this.dependencies.translationFactory, "getArrayLoader").and.returnValue(this.dependencies.mockedArrayLoader);
         spyOn(this.dependencies.translationFactory, "getTranslator").and.returnValue(this.dependencies.mockedTranslator);
@@ -24,9 +29,8 @@ describe("Tests for TranslationProvider", function() {
         });
 
         it("sets the primary translations when the repository provides some", function(){
-            var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            this.translationProvider.initialise(
+            var translationService = this.translationProvider.initialise(
                 this.dependencies.mockedConfig.translation,
                 this.dependencies.cacheService,
                 this.dependencies.translationRepository,
@@ -34,32 +38,13 @@ describe("Tests for TranslationProvider", function() {
                 this.dependencies.translationFactory
             );
 
-            expect(this.dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([
-                expectedPrimaryKey,
-                this.mockedBundle,
-                jasmine.any(String)
-            ]);
+            testDependencyExpectations.call(this, mockedLocale);
 
-            expect(this.dependencies.mockedArrayLoader.load.calls.count()).toEqual(2);
-            expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(0)).toEqual([this.mockedBundle]);
-            expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(1)).toEqual([this.mockedBundle]);
-
-            expect(this.dependencies.mockedTranslator.load.calls.count()).toEqual(2);
-            expect(this.dependencies.mockedTranslator.load.calls.argsFor(0)).toEqual([
-                this.dependencies.mockedArrayLoader,
-                "primary",
-                mockedLocale
-            ]);
-            expect(this.dependencies.mockedTranslator.load.calls.argsFor(1)).toEqual([
-                this.dependencies.mockedArrayLoader,
-                "secondary",
-                mockedLocale
-            ]);
+            expect(translationService).toEqual(this.dependencies.mockedTranslator);
         });
     });
 
-    describe("test with partially-populated bundle", function(){
+    /*describe("test with partially-populated bundle", function(){
         beforeEach(function(){
             var mockedBundle = {};
             spyOn(this.dependencies.translationRepository, "loadBundle").and.returnValue(mockedBundle);
@@ -69,6 +54,9 @@ describe("Tests for TranslationProvider", function() {
         it("sets the primary translations even when the repository doesn't provide any", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
+            expect(this.dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
+            expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
+
             this.translationProvider.initialise(
                 this.dependencies.mockedConfig.translation,
                 this.dependencies.cacheService,
@@ -76,11 +64,8 @@ describe("Tests for TranslationProvider", function() {
                 this.dependencies.requestService,
                 this.dependencies.translationFactory
             );
-
-            expect(this.dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
         });
-    });
+    });*/
 });
 
 var getTestDependencies = function(){
@@ -125,23 +110,30 @@ var getMockedConfig = function(){
 };
 
 var getCacheService = function(config){
-    var CacheService = require("../../src/service/CacheService.js");
-    return new CacheService(config.cache);
+    return {
+        isActive : function(){},
+        exists : function(key){},
+        get : function(key){},
+        put : function(key, value){}
+    };
 };
 
 var getTranslationRepository = function(){
-    var TranslationRepository = require("../../src/repository/TranslationRepository.js");
-    return new TranslationRepository();
+    return {loadBundle : function(bundle, locale){}};
 };
 
 var getRequestService = function(){
-    var RequestService = require("../../src/service/RequestService.js");
-    return new RequestService({});
+    return {
+        isTranslatorEnabled : function(){},
+        getLocale : function(){}
+    };
 };
 
 var getTranslationFactory = function(){
-    var TranslationFactory = require("../../src/factory/TranslationFactory.js");
-    return new TranslationFactory();
+    return {
+        getArrayLoader : function(){},
+        getTranslator : function(){}
+    };
 };
 
 var getMockedCacheKeyForBundle = function(bundle, locale){
@@ -154,4 +146,57 @@ var getMockedArrayLoader = function(){
 
 var getMockedTranslator = function(){
     return {load:function(loader, bundle, locale){}};
+};
+
+var testDependencyExpectations = function(mockedLocale){
+    var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
+    var expectedSecondaryKey = getMockedCacheKeyForBundle("secondary", mockedLocale);
+
+    expect(this.dependencies.requestService.isTranslatorEnabled.calls.count()).toEqual(1);
+    expect(this.dependencies.requestService.getLocale.calls.count()).toEqual(1);
+
+    expect(this.dependencies.cacheService.isActive.calls.count()).toEqual(1);
+
+    expect(this.dependencies.translationRepository.loadBundle.calls.count()).toEqual(2);
+    expect(this.dependencies.translationRepository.loadBundle.calls.argsFor(0)).toEqual([
+        "primary",
+        mockedLocale
+    ]);
+    expect(this.dependencies.translationRepository.loadBundle.calls.argsFor(1)).toEqual([
+        "secondary",
+        mockedLocale
+    ]);
+
+    expect(this.dependencies.cacheService.put.calls.count()).toEqual(2);
+    expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([
+        expectedPrimaryKey,
+        this.mockedBundle,
+        this.dependencies.mockedConfig.translation.ttl
+    ]);
+    expect(this.dependencies.cacheService.put.calls.argsFor(1)).toEqual([
+        expectedSecondaryKey,
+        this.mockedBundle,
+        this.dependencies.mockedConfig.translation.ttl
+    ]);
+
+    expect(this.dependencies.translationFactory.getTranslator.calls.count()).toEqual(1);
+    expect(this.dependencies.translationFactory.getArrayLoader.calls.count()).toEqual(1);
+
+
+    expect(this.dependencies.mockedArrayLoader.load.calls.count()).toEqual(2);
+    expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(0)).toEqual([this.mockedBundle]);
+    expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(1)).toEqual([this.mockedBundle]);
+
+    expect(this.dependencies.mockedTranslator.load.calls.count()).toEqual(2);
+    expect(this.dependencies.mockedTranslator.load.calls.argsFor(0)).toEqual([
+        this.dependencies.mockedArrayLoader,
+        "primary",
+        mockedLocale
+    ]);
+    expect(this.dependencies.mockedTranslator.load.calls.argsFor(1)).toEqual([
+        this.dependencies.mockedArrayLoader,
+        "secondary",
+        mockedLocale
+    ]);
+
 };
