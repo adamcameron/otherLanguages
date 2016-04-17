@@ -44,7 +44,7 @@ describe("Tests for TranslationProvider", function() {
         });
     });
 
-    /*describe("test with partially-populated bundle", function(){
+    describe("test with partially-populated bundle", function(){
         beforeEach(function(){
             var mockedBundle = {};
             spyOn(this.dependencies.translationRepository, "loadBundle").and.returnValue(mockedBundle);
@@ -54,9 +54,6 @@ describe("Tests for TranslationProvider", function() {
         it("sets the primary translations even when the repository doesn't provide any", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            expect(this.dependencies.cacheService.put.calls.count()).toBeGreaterThan(0);
-            expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([expectedPrimaryKey, this.mockedBundle, jasmine.any(String)]);
-
             this.translationProvider.initialise(
                 this.dependencies.mockedConfig.translation,
                 this.dependencies.cacheService,
@@ -64,8 +61,12 @@ describe("Tests for TranslationProvider", function() {
                 this.dependencies.requestService,
                 this.dependencies.translationFactory
             );
+
+            var translationService = testDependencyExpectations.call(this, mockedLocale);
+
+           // expect(translationService).toEqual(this.dependencies.mockedTranslator);
         });
-    });*/
+    })
 });
 
 var getTestDependencies = function(){
