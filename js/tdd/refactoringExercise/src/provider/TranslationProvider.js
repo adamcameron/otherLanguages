@@ -20,6 +20,7 @@ var TranslationProvider = function(config){
             && cacheService.exists(cacheKeySecondary);
 
         var translations = {primary:{},secondary:{}};
+        //var translations = {};
         if (okToGetFromCache) {
             translations.primary = cacheService.get(cacheKeyPrimary);
             translations.secondary = cacheService.get(cacheKeySecondary);

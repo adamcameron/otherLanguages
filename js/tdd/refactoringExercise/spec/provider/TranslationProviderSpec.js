@@ -54,7 +54,7 @@ describe("Tests for TranslationProvider", function() {
         it("sets the primary translations even when the repository doesn't provide any", function(){
             var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
 
-            this.translationProvider.initialise(
+            var translationService = this.translationProvider.initialise(
                 this.dependencies.mockedConfig.translation,
                 this.dependencies.cacheService,
                 this.dependencies.translationRepository,
@@ -62,9 +62,9 @@ describe("Tests for TranslationProvider", function() {
                 this.dependencies.translationFactory
             );
 
-            var translationService = testDependencyExpectations.call(this, mockedLocale);
+           testDependencyExpectations.call(this, mockedLocale);
 
-           // expect(translationService).toEqual(this.dependencies.mockedTranslator);
+           expect(translationService).toEqual(this.dependencies.mockedTranslator);
         });
     })
 });
