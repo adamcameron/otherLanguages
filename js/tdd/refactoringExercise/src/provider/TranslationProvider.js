@@ -10,48 +10,70 @@ var TranslationProvider = function(config){
             return;
         }
 
-        var currentLocale = requestService.getLocale();
+        var locale = requestService.getLocale();
+        var translations = getTranslations(cacheService, translationRepository, locale);
+        var translationService = createTranslationService(translationFactory, translations, locale);
 
-        var cacheKeyPrimary = getCacheKey("primary", currentLocale);
-        var cacheKeySecondary = getCacheKey("secondary", currentLocale);
+        return translationService;
+    };
+
+    var getTranslations = function(cacheService, translationRepository, locale){
+        var cacheKeys = {
+            primary : getCacheKey("primary", locale),
+            secondary : getCacheKey("secondary", locale)
+        };
 
         var okToGetFromCache = cacheService.isActive()
-            && cacheService.exists(cacheKeyPrimary)
-            && cacheService.exists(cacheKeySecondary);
+            && cacheService.exists(cacheKeys.primary)
+            && cacheService.exists(cacheKeys.secondary);
 
-        var translations = {primary:{},secondary:{}};
-        //var translations = {};
+        var translations;
         if (okToGetFromCache) {
-            translations.primary = cacheService.get(cacheKeyPrimary);
-            translations.secondary = cacheService.get(cacheKeySecondary);
-        }else{
-
-            var rawTranslations = {
-                primary : translationRepository.loadBundle("primary", currentLocale),
-                secondary : translationRepository.loadBundle("secondary", currentLocale)
+            translations = {
+                primary : cacheService.get(cacheKeys.primary),
+                secondary:cacheService.get(cacheKeys.secondary)
             };
-
-            for (var key in rawTranslations.primary){
-                translations.primary = translations.primary || {};
-                translations.primary[key] = rawTranslations.primary[key];
-            }
-
-            for (var key in rawTranslations.secondary){
-                translations.secondary = translations.secondary || {};
-                translations.secondary[key] = rawTranslations.secondary[key];
-            }
-
-            var ttl = config.ttl;
-
-            cacheService.put(cacheKeyPrimary, translations.primary, ttl);
-            cacheService.put(cacheKeySecondary, translations.secondary, ttl);
+        }else{
+            translations = loadTranslationsFromRepository(translationRepository, locale);
+            cacheTranslations(config, cacheService, translations, cacheKeys);
         }
 
+        return translations;
+    };
+
+    var loadTranslationsFromRepository = function(translationRepository, locale){
+        var rawTranslations = {
+            primary : translationRepository.loadBundle("primary", locale),
+            secondary : translationRepository.loadBundle("secondary", locale)
+        };
+
+        var translations = {primary:{}, secondary:{}};
+
+        for (var key in rawTranslations.primary){
+            translations.primary = translations.primary || {};
+            translations.primary[key] = rawTranslations.primary[key];
+        }
+
+        for (var key in rawTranslations.secondary){
+            translations.secondary = translations.secondary || {};
+            translations.secondary[key] = rawTranslations.secondary[key];
+        }
+        return translations;
+    };
+
+    var cacheTranslations = function(config, cacheService, translations, cacheKeys){
+        var ttl = config.ttl;
+
+        cacheService.put(cacheKeys.primary, translations.primary, ttl);
+        cacheService.put(cacheKeys.secondary, translations.secondary, ttl);
+    };
+
+    var createTranslationService = function(translationFactory, translations, locale){
         var translationService = translationFactory.getTranslator();
         var arrayLoader = translationFactory.getArrayLoader();
 
-        translationService.load(arrayLoader.load(translations.primary), 'primary', currentLocale);
-        translationService.load(arrayLoader.load(translations.secondary), 'secondary', currentLocale);
+        translationService.load(arrayLoader.load(translations.primary), 'primary', locale);
+        translationService.load(arrayLoader.load(translations.secondary), 'secondary', locale);
 
         return translationService;
     };

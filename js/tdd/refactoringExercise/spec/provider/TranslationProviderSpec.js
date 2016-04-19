@@ -1,7 +1,6 @@
 describe("Tests for TranslationProvider", function() {
 
     var mockedLocale = "MOCKED_LOCALE";
-    var methodStub = function(){};
 
     beforeEach(function(){
         this.dependencies = getTestDependencies();
@@ -38,7 +37,7 @@ describe("Tests for TranslationProvider", function() {
                 this.dependencies.translationFactory
             );
 
-            testDependencyExpectations.call(this, mockedLocale);
+            testDependencyExpectations(this.dependencies, this.mockedBundle, mockedLocale);
 
             expect(translationService).toEqual(this.dependencies.mockedTranslator);
         });
@@ -62,11 +61,11 @@ describe("Tests for TranslationProvider", function() {
                 this.dependencies.translationFactory
             );
 
-           testDependencyExpectations.call(this, mockedLocale);
+     testDependencyExpectations(this.dependencies, this.mockedBundle, mockedLocale);
 
            expect(translationService).toEqual(this.dependencies.mockedTranslator);
         });
-    })
+    });
 });
 
 var getTestDependencies = function(){
@@ -149,53 +148,53 @@ var getMockedTranslator = function(){
     return {load:function(loader, bundle, locale){}};
 };
 
-var testDependencyExpectations = function(mockedLocale){
+var testDependencyExpectations = function(dependencies, mockedBundle, mockedLocale){
     var expectedPrimaryKey = getMockedCacheKeyForBundle("primary", mockedLocale);
     var expectedSecondaryKey = getMockedCacheKeyForBundle("secondary", mockedLocale);
 
-    expect(this.dependencies.requestService.isTranslatorEnabled.calls.count()).toEqual(1);
-    expect(this.dependencies.requestService.getLocale.calls.count()).toEqual(1);
+    expect(dependencies.requestService.isTranslatorEnabled.calls.count()).toEqual(1);
+    expect(dependencies.requestService.getLocale.calls.count()).toEqual(1);
 
-    expect(this.dependencies.cacheService.isActive.calls.count()).toEqual(1);
+    expect(dependencies.cacheService.isActive.calls.count()).toEqual(1);
 
-    expect(this.dependencies.translationRepository.loadBundle.calls.count()).toEqual(2);
-    expect(this.dependencies.translationRepository.loadBundle.calls.argsFor(0)).toEqual([
+    expect(dependencies.translationRepository.loadBundle.calls.count()).toEqual(2);
+    expect(dependencies.translationRepository.loadBundle.calls.argsFor(0)).toEqual([
         "primary",
         mockedLocale
     ]);
-    expect(this.dependencies.translationRepository.loadBundle.calls.argsFor(1)).toEqual([
+    expect(dependencies.translationRepository.loadBundle.calls.argsFor(1)).toEqual([
         "secondary",
         mockedLocale
     ]);
 
-    expect(this.dependencies.cacheService.put.calls.count()).toEqual(2);
-    expect(this.dependencies.cacheService.put.calls.argsFor(0)).toEqual([
+    expect(dependencies.cacheService.put.calls.count()).toEqual(2);
+    expect(dependencies.cacheService.put.calls.argsFor(0)).toEqual([
         expectedPrimaryKey,
-        this.mockedBundle,
-        this.dependencies.mockedConfig.translation.ttl
+        mockedBundle,
+        dependencies.mockedConfig.translation.ttl
     ]);
-    expect(this.dependencies.cacheService.put.calls.argsFor(1)).toEqual([
+    expect(dependencies.cacheService.put.calls.argsFor(1)).toEqual([
         expectedSecondaryKey,
-        this.mockedBundle,
-        this.dependencies.mockedConfig.translation.ttl
+        mockedBundle,
+        dependencies.mockedConfig.translation.ttl
     ]);
 
-    expect(this.dependencies.translationFactory.getTranslator.calls.count()).toEqual(1);
-    expect(this.dependencies.translationFactory.getArrayLoader.calls.count()).toEqual(1);
+    expect(dependencies.translationFactory.getTranslator.calls.count()).toEqual(1);
+    expect(dependencies.translationFactory.getArrayLoader.calls.count()).toEqual(1);
 
 
-    expect(this.dependencies.mockedArrayLoader.load.calls.count()).toEqual(2);
-    expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(0)).toEqual([this.mockedBundle]);
-    expect(this.dependencies.mockedArrayLoader.load.calls.argsFor(1)).toEqual([this.mockedBundle]);
+    expect(dependencies.mockedArrayLoader.load.calls.count()).toEqual(2);
+    expect(dependencies.mockedArrayLoader.load.calls.argsFor(0)).toEqual([mockedBundle]);
+    expect(dependencies.mockedArrayLoader.load.calls.argsFor(1)).toEqual([mockedBundle]);
 
-    expect(this.dependencies.mockedTranslator.load.calls.count()).toEqual(2);
-    expect(this.dependencies.mockedTranslator.load.calls.argsFor(0)).toEqual([
-        this.dependencies.mockedArrayLoader,
+    expect(dependencies.mockedTranslator.load.calls.count()).toEqual(2);
+    expect(dependencies.mockedTranslator.load.calls.argsFor(0)).toEqual([
+        dependencies.mockedArrayLoader,
         "primary",
         mockedLocale
     ]);
-    expect(this.dependencies.mockedTranslator.load.calls.argsFor(1)).toEqual([
-        this.dependencies.mockedArrayLoader,
+    expect(dependencies.mockedTranslator.load.calls.argsFor(1)).toEqual([
+        dependencies.mockedArrayLoader,
         "secondary",
         mockedLocale
     ]);
