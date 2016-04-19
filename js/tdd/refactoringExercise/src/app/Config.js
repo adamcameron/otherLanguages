@@ -1,14 +1,15 @@
 var Config = function(){
-	this.cache = {
-		active : true
-	};
 	this.translation = {
 		bundles : {
 			primary : {cacheKey : "translations.primary"},
 			secondary : {cacheKey : "translations.secondary"}
 		},
-		enabled : true
-	}
+		enabled : true,
+		ttl : 60
+	};
+	this.cache = {
+		active : false
+	};
 };
 
 module.exports = Config;

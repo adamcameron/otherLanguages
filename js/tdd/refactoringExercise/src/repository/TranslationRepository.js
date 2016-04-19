@@ -29,15 +29,12 @@ var TranslationRepository = function(availableBundles){
 		return bundles;
 	}, {});
 
-	var TranslationRepository = function(){};
-
-	TranslationRepository.prototype.loadBundle = function(bundle){
+	TranslationRepository.prototype.loadBundle = function(bundle, locale){
 		if (bundles.hasOwnProperty(bundle)) {
 			return bundles[bundle];
 		}
 		throw new BundleNotFoundException(bundle);
 	};
-	return new TranslationRepository();
 };
 
 var BundleNotFoundException = function(bundle){

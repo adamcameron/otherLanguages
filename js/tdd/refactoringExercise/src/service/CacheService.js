@@ -2,7 +2,6 @@ var CacheService = function(config){
 	var cache = {};
 	var active = config.active;
 
-	var CacheService = function(){};
 	CacheService.prototype.isActive = function(){
 		return active;
 	};
@@ -21,8 +20,6 @@ var CacheService = function(config){
 		}
 		throw new KeyNotFoundException(key);
 	};
-
-	return new CacheService();
 };
 
 var KeyNotFoundException = function(key){

@@ -1,20 +1,15 @@
 var ServiceProvider = function(config){
-	this.config = config;
-};
 
-ServiceProvider.prototype.register = function(app){
-	var CacheService = require("../service/CacheService.js");
-	var TranslationService = require("../service/TranslationService.js");
+	ServiceProvider.prototype.register = function(app){
+		var CacheService = require("../service/CacheService.js");
+		var RequestService = require("../service/RequestService.js");
 
-	app.service = {};
-	app.service.cache = new CacheService(this.config.cache);
-	app.service.translation = new TranslationService(
-		this.config.translation,
-		app.service.cache,
-		app.repository.translation
-	);
-
-	return app;
+		app.service = {
+			cache :	 new CacheService(config.cache),
+			request : new RequestService(app)
+		};
+		return app;
+	};
 };
 
 module.exports = ServiceProvider;
