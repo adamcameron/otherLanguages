@@ -15,12 +15,34 @@ console.log("\n\n\n\n");
 
 
 
+console.log("Working example using wrapper to effect closure");
+var usingWrapper = function(firstThree, fourth, type){
+	var allFour = firstThree;
+	allFour.push(fourth);
+	var prefix = type;
+
+	allFour.forEach(function(element){
+		eachHandlerToUseWithWrapper(prefix, element);
+	}); // bind prefix to function
+};
+
+var eachHandlerToUseWithWrapper = function(prefix, element){
+	console.log(prefix + ": " + element);
+};
+
+
+var oneTwoThreeInMaori = ["tahi", "rua", "toru"];
+var fourInMaori = "wha";
+usingWrapper(oneTwoThreeInMaori, fourInMaori, "Number");
+console.log("\n\n\n\n");
+
+
 console.log("Working example using bind to implement closure explicitly");
 var usingExtractedWithBind = function(firstThree, fourth, type){
 	var allFour = firstThree;
 	allFour.push(fourth);
 	var prefix = type;
-	
+
 	allFour.forEach(eachHandlerToUseWithBind.bind(undefined, prefix)); // bind prefix to function
 };
 
@@ -41,7 +63,7 @@ var usingExtractedWithoutBind = function(firstThree, fourth, type){
 	var allFour = firstThree;
 	allFour.push(fourth);
 	var prefix = type;
-	
+
 	allFour.forEach(eachHandler);
 };
 
