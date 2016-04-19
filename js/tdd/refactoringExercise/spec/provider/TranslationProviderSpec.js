@@ -168,16 +168,8 @@ var testDependencyExpectations = function(dependencies, mockedBundle, mockedLoca
     ]);
 
     expect(dependencies.cacheService.put.calls.count()).toEqual(2);
-    expect(dependencies.cacheService.put.calls.argsFor(0)).toEqual([
-        expectedPrimaryKey,
-        mockedBundle,
-        dependencies.mockedConfig.translation.ttl
-    ]);
-    expect(dependencies.cacheService.put.calls.argsFor(1)).toEqual([
-        expectedSecondaryKey,
-        mockedBundle,
-        dependencies.mockedConfig.translation.ttl
-    ]);
+    expect(dependencies.cacheService.put.calls.argsFor(0)[1]).toEqual(mockedBundle);
+    expect(dependencies.cacheService.put.calls.argsFor(1)[1]).toEqual(mockedBundle);
 
     expect(dependencies.translationFactory.getTranslator.calls.count()).toEqual(1);
     expect(dependencies.translationFactory.getArrayLoader.calls.count()).toEqual(1);
