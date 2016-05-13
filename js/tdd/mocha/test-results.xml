@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="0" tests="1" failures="0">
+  <testsuite name="Root Suite" timestamp="2016-05-05T08:46:57" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="Array" timestamp="2016-05-05T08:46:57" tests="0" failures="0" time="0">
+  </testsuite>
+  <testsuite name="#indexOf()" timestamp="2016-05-05T08:46:57" tests="1" failures="0" time="0">
+    <testcase name="Root Suite Array #indexOf() should return -1 when the value is not present" time="0" classname="should return -1 when the value is not present">
+    </testcase>
+  </testsuite>
+</testsuites>
