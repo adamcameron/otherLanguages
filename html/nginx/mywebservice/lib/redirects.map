@@ -1,0 +1,2 @@
+~.*/endPointThatNeededUpgrading.* http://nginx2.local:8820/mywebservice/2.0;
+default http://nginx1.local:8810/mywebservice/1.0;
