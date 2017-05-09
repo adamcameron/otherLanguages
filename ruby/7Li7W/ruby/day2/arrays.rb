@@ -1,5 +1,5 @@
 # arrays.rb
-load "../day1/sep.rb"
+load "./sep.rb"
 
 animals = ['lions', 'tigers', 'bears']
 puts "puts animals"
@@ -31,6 +31,9 @@ puts animals[0..1]
 sep
 
 puts "puts (0..1).class"
+puts (0..1).class
 sep
 
-puts (0..1).class
+puts "puts animals[0..1].class"
+puts animals[0..1].class
+sep

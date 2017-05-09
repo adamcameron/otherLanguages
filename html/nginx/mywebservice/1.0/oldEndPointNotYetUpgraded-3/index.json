@@ -1,0 +1,5 @@
+{
+	"service" : "mywebservice",
+	"version" : "1.0",
+	"endpoint" : "oldEndPointNotYetUpgraded-3"
+}
