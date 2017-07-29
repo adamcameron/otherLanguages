@@ -11,6 +11,16 @@ class Person {
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
 	}
+	
+	function __toString()
+	{
+		return "{$this->firstName} {$this->lastName}";
+	}
+	
+	function __debuginfo()
+	{
+		return ['name' => $this->__toString()];
+	}
 }
 
 $peopleData = [
@@ -25,3 +35,5 @@ $people = array_map(function($names, $id) {
 }, $peopleData, array_keys($peopleData));
 
 var_dump($people);
+
+echo $people[2];
