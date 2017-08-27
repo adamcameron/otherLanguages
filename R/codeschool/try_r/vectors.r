@@ -24,5 +24,3 @@ names(ranks) <- c("first", "second", "third")
 ranks["first"]
 ranks["third"] <- 4
 ranks
-
-
